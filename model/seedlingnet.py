@@ -40,8 +40,28 @@ class seedlingFeatureEncoder(nn.Module):
         return x
 
 
+
+class SeedlingNet(nn.Module):
+    def __init__(self):
+        super().__init__()
+        self.classifer = seedlingClassifier(in_features=12)
+        self.encoder = seedlingFeatureEncoder()
+
+    def forward(self, features_HWA, fourier_descriptors):
+        verbose_features = torch.flatten(features_HWA, start_dim=1)
+        hidden_features = torch.flatten(self.encoder(fourier_descriptors), start_dim=1)
+        features = torch.cat([verbose_features, hidden_features], dim=1)
+        class_seelding = self.classifer(features)
+        return
+
+
+def test_model():
+    
+    model = SeedlingNet()
+    x1 = torch.rand([1,1,4])
+    x2 = torch.rand([1,1,35])
+    y = model(x1, x2)
+
+
 if __name__ == '__main__':
-    model = seedlingFeatureEncoder()
-    x = torch.rand([1,1,35])
-    y = model(x)
-    print(y.shape)    
+    test_model()
