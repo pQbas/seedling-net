@@ -49,10 +49,8 @@ class SeedlingNet(nn.Module):
         if use_hiden_features != False:
             self.classifer = seedlingClassifier(in_features=12)
             self.encoder = seedlingFeatureEncoder()
-
         else:
             self.classifer = seedlingClassifier(in_features=4)
-
 
     def forward(self, features_HWA, fourier_descriptors):
         verbose_features = torch.flatten(features_HWA, start_dim=1)
