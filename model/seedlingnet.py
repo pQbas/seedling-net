@@ -42,26 +42,38 @@ class seedlingFeatureEncoder(nn.Module):
 
 
 class SeedlingNet(nn.Module):
-    def __init__(self):
+    def __init__(self, use_hiden_features = False):
         super().__init__()
-        self.classifer = seedlingClassifier(in_features=12)
-        self.encoder = seedlingFeatureEncoder()
+        self.use_hiden_features = use_hiden_features
+
+        if use_hiden_features != False:
+            self.classifer = seedlingClassifier(in_features=12)
+            self.encoder = seedlingFeatureEncoder()
+
+        else:
+            self.classifer = seedlingClassifier(in_features=4)
+
 
     def forward(self, features_HWA, fourier_descriptors):
         verbose_features = torch.flatten(features_HWA, start_dim=1)
-        hidden_features = torch.flatten(self.encoder(fourier_descriptors), start_dim=1)
-        features = torch.cat([verbose_features, hidden_features], dim=1)
+        
+        if self.use_hiden_features != False:
+            hidden_features = torch.flatten(self.encoder(fourier_descriptors), start_dim=1)
+            features = torch.cat([verbose_features, hidden_features], dim=1)
+        else:
+            features = verbose_features
         class_seelding = self.classifer(features)
-        return
+        
+        return class_seelding
 
 
 def test_model():
     
-    model = SeedlingNet()
-    x1 = torch.rand([1,1,4])
-    x2 = torch.rand([1,1,35])
+    model = SeedlingNet(use_hiden_features=False)
+    x1 = torch.rand([10,1,4])
+    x2 = torch.rand([10,1,35])
     y = model(x1, x2)
-
+    print(y)
 
 if __name__ == '__main__':
     test_model()
