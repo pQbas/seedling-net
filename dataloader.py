@@ -19,13 +19,19 @@ class seedlingFeaturesDataset(Dataset):
         if torch.is_tensor(idx):
             idx = idx.tolist()
 
-        seedling_features = self.seedlingfeatures.iloc[idx, 0:3]
-        quality = self.seedlingfeatures.iloc[idx, 3]
+        quality = self.seedlingfeatures.iloc[idx, 0]
+        seedling_features = pd.to_numeric(self.seedlingfeatures.iloc[idx, 1:4])
+        fourier_descriptors = self.seedlingfeatures.iloc[idx, 4:41]
+        #print(fourier_descriptors)
+        #print(type(self.seedlingfeatures.iloc[idx, 3].apply(eval).apply(np.array)))
+        #print(seedling_features.dtype)
+        #print(pd.to_numeric(seedling_features).dtype)
 
-        seedling_features = np.array([seedling_features])
         quality = np.array([quality])
+        seedling_features = np.array([seedling_features])
+        fourier_descriptors = np.array([fourier_descriptors])
 
-        sample = {'features':seedling_features, 'quality':quality}
+        sample = {'quality':quality, 'features':seedling_features, 'fourier_descriptors': fourier_descriptors}
         return sample
     
     def setSeedlingFeatures(self, idx):
@@ -35,7 +41,7 @@ class seedlingFeaturesDataset(Dataset):
     def get_subset(self, idx):
         dataset_copy = copy.copy(self)
         dataset_copy.setSeedlingFeatures(idx)
-        return dataset_copy        
+        return dataset_copy
 
 
 class DataloaderBuilder():
@@ -59,3 +65,21 @@ class DataloaderBuilder():
         train_loader = DataLoader(self.dataset.get_subset(Xtrain_idx), batch_size=batch_size, shuffle=True)
         test_loader = DataLoader(self.dataset.get_subset(Xtest_idx), shuffle=True)
         return train_loader, test_loader
+
+
+if __name__ == '__main__':
+    #seedling_dataset = seedlingFeaturesDataset(csv_file='./data/combined_file.csv', root_dir='./')
+    seedling_dataset = seedlingFeaturesDataset(csv_file='./data/combined_file_efd_added.csv', root_dir='./')
+
+    ds = DataloaderBuilder(seedling_dataset)
+    trainloader, testloader = ds.get_train_test_set(test_size=0.3,batch_size=16)
+
+    # Hyperparameters of training
+    learning_rate = 0.1
+    epochs = 700
+    running_loss = 0.0
+
+    for data in testloader:
+        print(data['features'])
+        print(data['fourier_descriptors'])
+        print(data['quality'])
