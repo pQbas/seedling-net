@@ -40,7 +40,6 @@ class seedlingFeatureEncoder(nn.Module):
         return x
 
 
-
 class SeedlingNet(nn.Module):
     def __init__(self, n_encoder_features, n_verbose_features, use_hiden_features = False):
         super().__init__()
