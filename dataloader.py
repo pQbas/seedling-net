@@ -4,11 +4,33 @@ from torch.utils.data import Dataset, DataLoader
 import numpy as np
 from sklearn.model_selection import train_test_split
 import copy
+from PIL import Image, ImageOps
+import torchvision.transforms as T
+import torchvision
+import matplotlib.pyplot as plt
+
+
+class ThresholdTransform(object):
+  def __init__(self, thr_255):
+    self.thr = thr_255 / 255.  # input threshold for [0..255] gray level, convert to [0..1]
+
+  def __call__(self, x):
+    return (x > self.thr).to(x.dtype)  # do not change the data type
+
+class Invert():
+  def __call__(self, x):
+    return torchvision.transforms.functional.invert(x)  # do not change the data type
 
 
 class seedlingFeaturesDataset(Dataset):
     def __init__(self, csv_file, root_dir):
             self.seedlingfeatures = pd.read_csv(csv_file)
+            # This transform is used in experiments
+            self.transform = T.Compose([
+                T.Resize(size = (224,224)),
+                T.ToTensor(),
+                ThresholdTransform(thr_255=60)
+            ])
 
     def __len__(self):
         return len(self.seedlingfeatures)
@@ -20,18 +42,31 @@ class seedlingFeaturesDataset(Dataset):
             idx = idx.tolist()
 
         quality = self.seedlingfeatures.iloc[idx, 0]
-        seedling_features = pd.to_numeric(self.seedlingfeatures.iloc[idx, 1:4])
-        fourier_descriptors = self.seedlingfeatures.iloc[idx, 4:41]
-        #print(fourier_descriptors)
-        #print(type(self.seedlingfeatures.iloc[idx, 3].apply(eval).apply(np.array)))
-        #print(seedling_features.dtype)
-        #print(pd.to_numeric(seedling_features).dtype)
+        seedling_features = pd.to_numeric(self.seedlingfeatures.iloc[idx, 1:7])
+        
+        vertical_mask_path = self.seedlingfeatures.iloc[idx, 7]
+        vertical_mask = Image.open(vertical_mask_path)
+        vertical_mask = ImageOps.grayscale(vertical_mask)
+
+        horizontal_mask_path = self.seedlingfeatures.iloc[idx, 8]
+        horizontal_mask = Image.open(horizontal_mask_path)
+        horizontal_mask = ImageOps.grayscale(horizontal_mask)
+
+        if self.transform:
+            horizontal_mask = self.transform(horizontal_mask)
+            vertical_mask = self.transform(vertical_mask)
+            
+        #fourier_descriptors = self.seedlingfeatures.iloc[idx, 4:41]
 
         quality = np.array([quality])
         seedling_features = np.array([seedling_features])
-        fourier_descriptors = np.array([fourier_descriptors])
+        #fourier_descriptors = np.array([fourier_descriptors])
 
-        sample = {'quality':quality, 'features':seedling_features, 'fourier_descriptors': fourier_descriptors}
+        sample = {'quality':quality, 
+                  'features':seedling_features, 
+                  'horizontal_mask': horizontal_mask, 
+                  'vertical_mask':vertical_mask} #, 'fourier_descriptors': fourier_descriptors}
+        
         return sample
     
     def setSeedlingFeatures(self, idx):
@@ -68,18 +103,12 @@ class DataloaderBuilder():
 
 
 if __name__ == '__main__':
-    #seedling_dataset = seedlingFeaturesDataset(csv_file='./data/combined_file.csv', root_dir='./')
-    seedling_dataset = seedlingFeaturesDataset(csv_file='./data/combined_file_efd_added.csv', root_dir='./')
+    seedling_dataset = seedlingFeaturesDataset(csv_file='data/dataset.csv', root_dir='./')
 
     ds = DataloaderBuilder(seedling_dataset)
     trainloader, testloader = ds.get_train_test_set(test_size=0.3,batch_size=16)
 
-    # Hyperparameters of training
-    learning_rate = 0.1
-    epochs = 700
-    running_loss = 0.0
-
-    for data in testloader:
+    for data in testloader:        
         print(data['features'])
-        print(data['fourier_descriptors'])
+        print(data['vertical_mask'])
         print(data['quality'])
