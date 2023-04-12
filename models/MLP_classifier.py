@@ -16,30 +16,31 @@ class model(nn.Module):
         x = self.relu(self.fc1(x))
         x = self.relu(self.fc2(x))
         x = self.relu(self.fc3(x))
-        x = torch.sigmoid(self.fc4(x))
+        x = torch.sigmoid(self.fc4(x)) #torch.sigmoid()
         return x
 
 
 def train(model, dataloader, optimizer, criterion):
-    for batch_idx, data in enumerate(tqdm(dataloader)):
+    for batch_idx, data in enumerate(dataloader):
         inputs1 = data['features'].type(torch.FloatTensor).squeeze()
         targets = data['quality'].type(torch.FloatTensor)
         outputs = model(inputs1)
-        loss = criterion(outputs, targets)        
+        #print(torch.cat([outputs, targets], dim=1))
+        loss = criterion(outputs, targets)      
         optimizer.zero_grad()
         loss.backward()
         optimizer.step()
 
-    print(loss)
+    print(loss.item())
 
 def validation(model, dataloader, threshold):
     correct = 0
     fail = 0
     
     for data in dataloader:
-        input1 = data['features'].type(torch.FloatTensor)[0,:,:]
+        input1 = data['features'].type(torch.FloatTensor)[0,:,:].to('cuda')
         #input2 = data['fourier_descriptors'].type(torch.FloatTensor)
-        target = data['quality'].type(torch.FloatTensor)
+        target = data['quality'].type(torch.FloatTensor).to('cuda')
         #print(input1.shape,input2.shape)
         output = model(input1)
         #print('target:', target, '| output:', output)

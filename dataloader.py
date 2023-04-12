@@ -43,18 +43,18 @@ class seedlingFeaturesDataset(Dataset):
 
         quality = self.seedlingfeatures.iloc[idx, 0]
         seedling_features = pd.to_numeric(self.seedlingfeatures.iloc[idx, 1:7])
-        
-        vertical_mask_path = self.seedlingfeatures.iloc[idx, 7]
-        vertical_mask = Image.open(vertical_mask_path)
-        vertical_mask = ImageOps.grayscale(vertical_mask)
 
-        horizontal_mask_path = self.seedlingfeatures.iloc[idx, 8]
-        horizontal_mask = Image.open(horizontal_mask_path)
-        horizontal_mask = ImageOps.grayscale(horizontal_mask)
+        # vertical_mask_path = self.seedlingfeatures.iloc[idx, 7]
+        # vertical_mask = Image.open(vertical_mask_path)
+        # vertical_mask = ImageOps.grayscale(vertical_mask)
 
-        if self.transform:
-            horizontal_mask = self.transform(horizontal_mask)
-            vertical_mask = self.transform(vertical_mask)
+        # horizontal_mask_path = self.seedlingfeatures.iloc[idx, 8]
+        # horizontal_mask = Image.open(horizontal_mask_path)
+        # horizontal_mask = ImageOps.grayscale(horizontal_mask)
+
+        # if self.transform:
+        #     horizontal_mask = self.transform(horizontal_mask)
+        #     vertical_mask = self.transform(vertical_mask)
             
         #fourier_descriptors = self.seedlingfeatures.iloc[idx, 4:41]
 
@@ -63,9 +63,9 @@ class seedlingFeaturesDataset(Dataset):
         #fourier_descriptors = np.array([fourier_descriptors])
 
         sample = {'quality':quality, 
-                  'features':seedling_features, 
-                  'horizontal_mask': horizontal_mask, 
-                  'vertical_mask':vertical_mask} #, 'fourier_descriptors': fourier_descriptors}
+                  'features':seedling_features} 
+                  #'horizontal_mask': horizontal_mask, 
+                  #'vertical_mask':vertical_mask} #, 'fourier_descriptors': fourier_descriptors}
         
         return sample
     
