@@ -9,19 +9,20 @@
 
 </div>
 
-
+<!-- 
 ## Installation & Testing:
 
-### Testing locally
+### Installation
 
-### Testing on Robot
+### Testing -->
 
-## Procedimiento
-
-### To-do:
 
 ### Publications:
 
-1. Artificial vision strategy for Ripeness assessment of Blueberries on Images taken during Pre-harvest stage in Agroindustrial Environments using Deep Learning Techniques. INTERCON2023. (https://ieeexplore.ieee.org/document/10326058)
-2. Detection and Classification of ventura-blueberries in five levels of ripeness from images taken during pre-harvest stage using Deep Learning techniques. ANDESCON2022. (https://ieeexplore.ieee.org/document/9989578)
+1. Deep Learning-based Segmentation and Classification System for Artichoke Seedling Grading. INTERCON2023. (https://ieeexplore.ieee.org/document/10326060)
 
+
+<!-- ### To-do:
+
+- [ ] Create a notebook to automate the training of the object detection model.
+- [ ] Order the dataset used to train Yolov7 -->
