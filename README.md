@@ -22,8 +22,8 @@
 1. Deep Learning-based Segmentation and Classification System for Artichoke Seedling Grading. INTERCON2023. (https://ieeexplore.ieee.org/document/10326060)
 
 
-<!-- ### To-do:
+### To-do:
 
 - [ ] Create a notebook to automate the training of the object detection model.
 - [ ] Order the dataset used to train Yolov7 
-- [ ] Upload the weights of the models -->
+- [ ] Upload the weights of the models
