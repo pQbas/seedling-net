@@ -25,4 +25,5 @@
 <!-- ### To-do:
 
 - [ ] Create a notebook to automate the training of the object detection model.
-- [ ] Order the dataset used to train Yolov7 -->
+- [ ] Order the dataset used to train Yolov7 
+- [ ] Upload the weights of the models -->
