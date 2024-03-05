@@ -1,7 +1,7 @@
 <div align="center">
     <h1>Seedling-Net</h1>
 
-  This is a repository of a computer vision system to classify seedlings in agroindustrial enviroments using YoloV7.
+  Computer vision system to classify artichoke seedlings in agroindustrial enviroments using YoloV7.
 
   <p align="center">
     <a href="here_is_a_demo_video"><img alt="Seedling Net" src="gallery/pipeline.png"></a>
