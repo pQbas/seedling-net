@@ -24,6 +24,6 @@
 
 ### To-do:
 
+- [ ] Upload the weights of the models to google drive and create the bash file to download them
 - [ ] Create a notebook to automate the training of the object detection model.
 - [ ] Order the dataset used to train Yolov7 
-- [ ] Upload the weights of the models
