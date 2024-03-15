@@ -2,13 +2,13 @@
 import sys
 import cv2
 import os
-from process import load_images_from_folder, image_processing, applyDepthOverImage, postProcess_h, postProcess_v
+from modules.detectors.process import load_images_from_folder, image_processing, applyDepthOverImage, postProcess_h, postProcess_v
 import numpy as np
 
-
-sys.path.insert(1, 'detectors')
-sys.path.insert(2, 'detectors/yolov7')
-from detector import Detector
+sys.path.insert(1, 'modules')
+sys.path.insert(2, 'modules/detectors')
+sys.path.insert(3, 'modules/detectors/yolov7')
+from modules.detector import Detector
 detector_h = Detector('yolo7', weights='./weights/yolov7-hseed.pt', data='./weights/opt.yaml', device='cuda:0')  # eg: 'yolov7' 'maskrcnn'
 detector_v = Detector('yolo7', weights='./weights/yolov7-vseed.pt', data='./weights/opt.yaml', device='cuda:0')  # eg: 'yolov7' 'maskrcnn'
 

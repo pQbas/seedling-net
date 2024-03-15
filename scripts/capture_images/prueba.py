@@ -22,8 +22,7 @@ if err != sl.ERROR_CODE.SUCCESS:
     zed.close()
     sys.exit(1)
 
-cam_laptop = cv2.VideoCapture(4) # (0) laptop, (2) zed,(4) monocular
-
+cam_laptop = cv2.VideoCapture(4)
 k = 0
 while True:
     # Capturar imagen de la camara izquierda ZED
@@ -35,7 +34,9 @@ while True:
 
         # Capturar imagen de la cámara monocular
         ret, img_laptop = cam_laptop.read()
-        img_laptop = cv2.rotate(img_laptop, cv2.ROTATE_90_COUNTERCLOCKWISE)  # Rotar hacia la izquierda
+        rows, cols, _ = img_laptop.shape
+        M = cv2.getRotationMatrix2D((cols/2, rows/2), 90, 1) 
+        img_laptop = cv2.warpAffine(img_laptop, M, (cols, rows))
         cv2.imshow('Laptop Camera', img_laptop)
 
         key = cv2.waitKey(10)
@@ -46,7 +47,7 @@ while True:
         if key == ord('t'):
             confirmation = input("Do you want to store these images? [yes/no]")  
                 
-            if confirmation == 'yes':
+            if confirmation == 'y':
                 cv2.imwrite(f"{FECHA}/vertical/rgb/{fila}_{columna}.jpg", img_zed)
                 cv2.imwrite(f"{FECHA}/horizontal/rgb/{fila}_{columna}.jpg", img_laptop)
                 k += 1
