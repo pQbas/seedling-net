@@ -4,7 +4,7 @@
   Computer vision system to classify artichoke seedlings in agroindustrial enviroments using YoloV7
 
   <p align="center">
-    <a href="here_is_a_demo_video"><img alt="Seedling Net" src="gallery/pipeline.png"></a>
+    <a href="here_is_a_demo_video"><img alt="Seedlingnator" src="gallery/pipeline.png"></a>
   </p>
 
 </div>
