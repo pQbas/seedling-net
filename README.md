@@ -1,5 +1,5 @@
 <div align="center">
-    <h1>Seedling-Net</h1>
+    <h1>Seedlingnator</h1>
 
   Computer vision system to classify artichoke seedlings in agroindustrial enviroments using YoloV7
 
